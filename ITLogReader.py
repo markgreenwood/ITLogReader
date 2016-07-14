@@ -1,6 +1,8 @@
 import argparse
 from pandas import DataFrame
 
+RJUST_POSN = 15
+
 class Connector:
     def __init__(self, fields):
         self.guid = fields[3]
@@ -11,11 +13,11 @@ class Connector:
         
     def __str__(self):
         return "Connector test " + ("=" * (80 - len("Connector test "))) + "\n" + \
-            "GUID: %s\n" % (self.guid,) + \
-            "Pin: %s\n" % (self.pin,) + \
-            "Test time: %s\n" % (self.test_time,) + \
-            "Result: %s\n" % (self.result,) + \
-            "Elapsed time: %s\n" % (self.elapsed_time,)
+            "GUID: ".rjust(RJUST_POSN) + ("%s\n" % (self.guid,)) + \
+            "Pin: ".rjust(RJUST_POSN) + ("%s\n" % (self.pin,)) + \
+            "Test time: ".rjust(RJUST_POSN) + ("%s\n" % (self.test_time,)) + \
+            "Result: ".rjust(RJUST_POSN) + ("%s\n" % (self.result,)) + \
+            "Elapsed time: ".rjust(RJUST_POSN) + ("%s\n" % (self.elapsed_time,))
         
 class TXPO:
     def __init__(self, fields):
@@ -37,22 +39,23 @@ class TXPO:
         self.elapsed_time = fields[18]
         
     def __str__(self):
-        return "GUID: %s\n" % (self.guid,) + \
-            "Tx Ant: %s\n" % (self.transmit_antenna,) + \
-            "Channel: %s\n" % (self.channel,) + \
-            "Packets: %s\n" % (self.transmit_packet_count,) + \
-            "Duty cycle: %s\n" % (self.duty_cycle,) + \
-            "Averages: %s\n" % (self.pm_avg_count,) + \
-            "Offset: %s\n" % (self.offset,) + \
-            "Data rate: %s\n" % (self.data_rate,) + \
-            "TXGC: %s\n" % (self.txgc,) + \
-            "Temp: %s\n" % (self.temp,) + \
-            "Upper limit: %s\n" % (self.upper_limit,) + \
-            "Lower limit: %s\n" % (self.lower_limit,) + \
-            "Power: %s\n" % (self.power,) + \
-            "Test time: %s\n" % (self.test_time,) + \
-            "Result: %s\n" % (self.result,) + \
-            "Elapsed time: %s\n" % (self.elapsed_time,)
+        return "TXPO test " + ("=" * (80 - len("TXPO test "))) + "\n" + \
+            "GUID: ".rjust(RJUST_POSN) + ("%s\n" % (self.guid,)) + \
+            "Tx Ant: ".rjust(RJUST_POSN) + ("%s\n" % (self.transmit_antenna,)) + \
+            "Channel: ".rjust(RJUST_POSN) + ("%s\n" % (self.channel,)) + \
+            "Packets: ".rjust(RJUST_POSN) + ("%s\n" % (self.transmit_packet_count,)) + \
+            "Duty cycle: ".rjust(RJUST_POSN) + ("%s\n" % (self.duty_cycle,)) + \
+            "Averages: ".rjust(RJUST_POSN) + ("%s\n" % (self.pm_avg_count,)) + \
+            "Offset: ".rjust(RJUST_POSN) + ("%s\n" % (self.offset,)) + \
+            "Data rate: ".rjust(RJUST_POSN) + ("%s\n" % (self.data_rate,)) + \
+            "TXGC: ".rjust(RJUST_POSN) + ("%s\n" % (self.txgc,)) + \
+            "Temp: ".rjust(RJUST_POSN) + ("%s\n" % (self.temp,)) + \
+            "Upper limit: ".rjust(RJUST_POSN) + ("%s\n" % (self.upper_limit,)) + \
+            "Lower limit: ".rjust(RJUST_POSN) + ("%s\n" % (self.lower_limit,)) + \
+            "Power: ".rjust(RJUST_POSN) + ("%s\n" % (self.power,)) + \
+            "Test time: ".rjust(RJUST_POSN) + ("%s\n" % (self.test_time,)) + \
+            "Result: ".rjust(RJUST_POSN) + ("%s\n" % (self.result,)) + \
+            "Elapsed time: ".rjust(RJUST_POSN) + ("%s\n" % (self.elapsed_time,))
             
         
 parser = argparse.ArgumentParser(description='Read file names')
@@ -62,17 +65,16 @@ args = parser.parse_args()
 
 infile = open(args.logfile)
 lines = infile.readlines()
-lines = lines[0].lstrip('|').rstrip('|').rstrip().split('||')
+lines = lines[0].lstrip('| ').rstrip('| ').split('||')
 
-tests_connector = []
-tests_txpo = []
+tests = []
 
 for line in lines:
     fields = line.split('|')
     if (fields[1] == "Connector"):
         t = Connector(fields)
-        tests_connector.append(t)
+        tests.append(t)
     if (fields[1] == "TXPO"):
         t = TXPO(fields)
-        tests_txpo.append(t)
+        tests.append(t)
         
